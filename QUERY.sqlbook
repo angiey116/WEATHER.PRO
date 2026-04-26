@@ -1,0 +1,10 @@
+-- SQLBook: Code
+SELECT * FROM weather_observations;
+
+DELETE FROM weather_observations WHERE id = 8;
+
+SELECT * FROM weather_observations;
+
+DELETE FROM weather_observations WHERE city = 'Chicago'
+
+SELECT * FROM weather_observations;
