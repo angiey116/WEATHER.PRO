@@ -1,4 +1,10 @@
 import requests
+from database import WeatherDatabase, WeatherObservation
+
+db = WeatherDatabase(
+    dbname="weather_project",
+    user="postgres",
+    password="cubbies1",)
 
 def get_location(city: str, country_code: str):
     url = "https://geocoding-api.open-meteo.com/v1/search"
@@ -47,27 +53,51 @@ def get_weather(latitude: float, longitude: float):
     }
 
 def main():
-    city = "chicago"
-    country_code = "US"
+    cities = [
+        ("Chicago", "US"),
+        ("New York", "US"),
+        ("Los Angeles", "US"),
+        ("London", "GB"),
+        ("Paris", "FR"),
+        ("Tokyo", "JP"),
+        ("Sydney", "AU"),
+        ("Toronto", "CA"),
+        ("Rome", "IT"),
+        ("Dubai", "AE")
+]
+    for city, country_code in cities:
+        location = get_location(city, country_code)
 
-    location = get_location(city, country_code)
-    if location is None:
-        return
+        if location is None:
+            continue
 
-    weather = get_weather(location["latitude"], location["longitude"])
+        weather = get_weather(location["latitude"], location["longitude"])
 
-    result = {
-        "city": location["city"],
-        "country": location["country"],
-        "latitude": weather["latitude"],
-        "longitude": weather["longitude"],
-        "temperature": weather["temperature"],
-        "elevation": weather["elevation"],
-        "windspeed": weather["windspeed"],
-        "observation_time": weather["observation_time"]
-    }
-
-    print(result)
+        result = {
+            "city": location["city"],
+            "country": location["country"],
+            "latitude": weather["latitude"],
+            "longitude": weather["longitude"],
+            "temperature": weather["temperature"],
+            "elevation": weather["elevation"],
+            "windspeed": weather["windspeed"],
+            "observation_time": weather["observation_time"]
+        }
+        
+        observation = WeatherObservation(
+            city=result["city"],
+            country=result["country"],
+            latitude=result["latitude"],
+            longitude=result["longitude"],
+            temperature=result["temperature"],
+            windspeed=result["windspeed"],
+            elevation=result["elevation"],
+            observation_time=result["observation_time"]
+        )
+        db.insert_observation(observation)
+        print(f"saved {result['city']}, {result['country']}")
 
 if __name__ == "__main__":
     main()
+    db.close()
+
