@@ -1,11 +1,12 @@
 from flask import request, jsonify
 from database import WeatherDatabase
 from weather_api import get_weather_observation
+from flask import render_template
 
 def register_routes(app):
     @app.get("/")
     def home():
-        return "<h1>Weather Tracker API</h1><p>Flask server is running.</p>"
+        return render_template("index.html")
     
     @app.get("/ingest")
     def ingest_weather():
