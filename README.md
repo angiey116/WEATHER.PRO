@@ -38,3 +38,15 @@ Weather.PRO is a Python Flask API that gets real-time weather data from the Open
 1. In terminal: pip install flask psycopg2 requests
 2. Run the server: python run.py
 3. Open in Browser at http://127.0.0.1:5000
+
+--
+
+## Routes
+1. Get homepage:
+http://127.0.0.1:5000/
+2. Ingest Weather:
+http://127.0.0.1:5000/ingest?city=Chicago&country=US
+3. Get all observations:
+http://127.0.0.1:5000/observations
+4. Get one observation:
+http://127.0.0.1:5000/observations/1
